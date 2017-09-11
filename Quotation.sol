@@ -6,43 +6,43 @@ contract Quotation
 {
     struct data_st
     {
-        uint        quo_date_;      //¹ÒÅÆÈÕÆÚ
-        uint        receipt_id_;    //²Öµ¥±àºÅ
-        string      ref_contract_;  //²Î¿¼ºÏÔ¼
-        string      class_id_;      //Æ·ÖÖ´úÂë
-        string      make_date_;     //²úÆÚ
-        string      lev_id_;        //µÈ¼¶
-        string      wh_id_;         //²Ö¿â´úÂë
-        string      place_id_;      //²úµØ´úÂë
-        string      quo_type_;      //±¨¼ÛÀàĞÍ
-        uint        price_;         //¼Û¸ñ£¨´úÌæ¸¡µãĞÍ£©
-        uint        quo_qty_;       //¹ÒÅÆÁ¿
-        uint        deal_qty_;      //³É½»Á¿
-        uint        rem_qty_;       //Ê£ÓàÁ¿
-        uint        wr_premium_;    //²Öµ¥ÉıÌùË®
-        string      quo_deadline_;  //¹ÒÅÆ½ØÖ¹ÈÕ
-        uint        dlv_unit_;      //½»¸îµ¥Î»
-        string      user_id_;       //ÓÃ»§id
-        address     seller_addr_;   //Âô·½µØÖ·
-        bool        state;          //ÊÇ·ñ´æÔÚ
+        uint        quo_date_;      //æŒ‚ç‰Œæ—¥æœŸ
+        uint        receipt_id_;    //ä»“å•ç¼–å·
+        string      ref_contract_;  //å‚è€ƒåˆçº¦
+        string      class_id_;      //å“ç§ä»£ç 
+        string      make_date_;     //äº§æœŸ
+        string      lev_id_;        //ç­‰çº§
+        string      wh_id_;         //ä»“åº“ä»£ç 
+        string      place_id_;      //äº§åœ°ä»£ç 
+        string      quo_type_;      //æŠ¥ä»·ç±»å‹
+        uint        price_;         //ä»·æ ¼ï¼ˆä»£æ›¿æµ®ç‚¹å‹ï¼‰
+        uint        quo_qty_;       //æŒ‚ç‰Œé‡
+        uint        deal_qty_;      //æˆäº¤é‡
+        uint        rem_qty_;       //å‰©ä½™é‡
+        uint        wr_premium_;    //ä»“å•å‡è´´æ°´
+        string      quo_deadline_;  //æŒ‚ç‰Œæˆªæ­¢æ—¥
+        uint        dlv_unit_;      //äº¤å‰²å•ä½
+        string      user_id_;       //ç”¨æˆ·id
+        address     seller_addr_;   //å–æ–¹åœ°å€
+        bool        state;          //æ˜¯å¦å­˜åœ¨
     }
     
-    uint                        quo_id_ = 0; //¹Òµ¥±àºÅ´Ó 1 ¿ªÊ¼
-    mapping(uint => data_st)    data_map;   //¹Òµ¥±àºÅ => ¹Òµ¥Êı¾İ
+    uint                        quo_id_ = 0; //æŒ‚å•ç¼–å·ä» 1 å¼€å§‹
+    mapping(uint => data_st)    data_map;   //æŒ‚å•ç¼–å· => æŒ‚å•æ•°æ®
     
-    //Êä³öĞĞÇé 
+    //è¾“å‡ºè¡Œæƒ… 
     event   print_1( uint,uint,string,string,string,string,string,string);
     event   print_2(string, uint,uint,uint,uint,uint,string,uint, string );
     
-    //´òÓ¡´íÎóĞÅÏ¢
+    //æ‰“å°é”™è¯¯ä¿¡æ¯
     event   error(string,string,string);
     
-    //²åÈëĞĞÇé           
+    //æ’å…¥è¡Œæƒ…           
     function insert_list_1(uint receipt_id,
                         string  ref_contract, string  class_id, string  make_date,   
                         string  lev_id, string  wh_id, string  place_id)
     {
-         quo_id_++;//¹Òµ¥±àºÅ
+         quo_id_++;//æŒ‚å•ç¼–å·
          
         data_map[quo_id_].quo_date_ = now;
         data_map[quo_id_].receipt_id_ = receipt_id;
@@ -52,7 +52,7 @@ contract Quotation
         data_map[quo_id_].lev_id_ = lev_id;
         data_map[quo_id_].wh_id_ = wh_id;
         data_map[quo_id_].place_id_ = place_id;
-        data_map[quo_id_].quo_type_ = "Ò»¿Ú¼Û";
+        data_map[quo_id_].quo_type_ = "ä¸€å£ä»·";
     }
     function insert_list_2(uint price, uint quo_qty, uint deal_qty,
                             uint rem_qty, uint wr_premium,  string  quo_deadline, 
@@ -72,7 +72,7 @@ contract Quotation
             
         print_quotation();    
         
-        //¶³½á²Öµ¥   
+        //å†»ç»“ä»“å•   
        // User user = User(msg.sender);
        // user.freeze( data_map[index_list].firm_sheet_id_,quo_qty);
             
@@ -80,7 +80,7 @@ contract Quotation
             
     }
     
-    //´òÓ¡ĞĞÇé
+    //æ‰“å°è¡Œæƒ…
     function print_quotation()
     {
         print_1(
@@ -108,33 +108,33 @@ contract Quotation
     }
   
   
-    //ÕªÅÆ
+    //æ‘˜ç‰Œ
     function delist(string user_id, uint quo_id, uint deal_qty) returns(uint)
     {
         if(deal_qty > data_map[quo_id].rem_qty_ )
         {
-            error("delist():²Öµ¥Ê£ÓàÁ¿²»×ã£¬ÕªÅÆ³ö´í","´íÎó´úÂë£º","-1");
+            error("delist():ä»“å•å‰©ä½™é‡ä¸è¶³ï¼Œæ‘˜ç‰Œå‡ºé”™","é”™è¯¯ä»£ç ï¼š","-1");
             return uint(-1);
         }
         
-        //¸üĞÂ³É½»Á¿£¬Ê£ÓàÁ¿
+        //æ›´æ–°æˆäº¤é‡ï¼Œå‰©ä½™é‡
         data_map[quo_id].deal_qty_  =   deal_qty ;
         data_map[quo_id].rem_qty_   -=  deal_qty ;
         
-        //¸üĞÂÂô·½¹ÒÅÆÇëÇó
+        //æ›´æ–°å–æ–¹æŒ‚ç‰Œè¯·æ±‚
         User user_sell = User(data_map[quo_id].seller_addr_);
         user_sell.update_list_req(quo_id, deal_qty);
         
-        //´´½¨Âô·½ºÏÍ¬
-        user_sell.deal_contract(data_map[quo_id].receipt_id_, "Âô",  data_map[quo_id].price_, deal_qty, user_id);
-        //´´½¨Âò·½ºÏÍ¬
+        //åˆ›å»ºå–æ–¹åˆåŒ
+        user_sell.deal_contract(data_map[quo_id].receipt_id_, "å–",  data_map[quo_id].price_, deal_qty, user_id);
+        //åˆ›å»ºä¹°æ–¹åˆåŒ
         User user_buy = User(msg.sender);
-        user_buy.deal_contract(data_map[quo_id].receipt_id_, "Âò",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
+        user_buy.deal_contract(data_map[quo_id].receipt_id_, "ä¹°",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
         
-        //´òÓ¡ĞĞÇé
+        //æ‰“å°è¡Œæƒ…
         print_quotation();
         
-        
+        //test
     }
   
   
