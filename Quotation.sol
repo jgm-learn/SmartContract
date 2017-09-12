@@ -9,7 +9,6 @@ contract Quotation
         uint        quo_date_;      //挂牌日期
         uint        quo_id_;        //挂牌编号
         uint        receipt_id_;    //仓单编号
-        string      ref_contract_;  //参考合约
         string      class_id_;      //品种代码
         string      make_date_;     //产期
         string      lev_id_;        //等级
@@ -48,7 +47,6 @@ contract Quotation
         data_map[quo_id_].quo_date_ = now;
         data_map[quo_id_].quo_id_ = quo_id_;
         data_map[quo_id_].receipt_id_ = receipt_id;
-        data_map[quo_id_].ref_contract_ = ref_contract;
         data_map[quo_id_].class_id_ = class_id;
         data_map[quo_id_].make_date_ = make_date;
         data_map[quo_id_].lev_id_ = lev_id;
