@@ -54,7 +54,7 @@ contract Quotation
         data_map[quo_id_].quo_type_ = "一口价";
     }
     function insertList2(uint price, uint quo_qty, uint deal_qty,
-                            uint rem_qty, uint wr_premium,  string  quo_deadline, 
+                            uint rem_qty, string  quo_deadline, 
                             uint dlv_unit, string user_id ) returns(uint)
     {
         data_map[quo_id_].price_ = price;
