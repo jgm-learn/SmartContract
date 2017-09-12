@@ -8,17 +8,17 @@ contract UserList
 {
     address                         id_con_addr;
     address                         quo_con_addr;
-    mapping(address => address)     user_con_map;       //Íâ²¿ÕË»§ => ºÏÔ¼ÕË»§
-    mapping(string => address)      user_id_con_map;    //ÓÃ»§id => ºÏÔ¼ÕË»§
+    mapping(address => address)     user_con_map;       //å¤–éƒ¨è´¦æˆ· => åˆçº¦è´¦æˆ·
+    mapping(string => address)      user_id_con_map;    //ç”¨æˆ·id => åˆçº¦è´¦æˆ·
     
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     function UserList()
     {
        id_con_addr     =       new ID_contract();
        quo_con_addr    =       new Quotation(); 
     }
     
-    //´´½¨ÓÃ»§
+    //åˆ›å»ºç”¨æˆ·
     function CreateUser(string user_id) returns(address ret)
     {
         
@@ -31,11 +31,11 @@ contract UserList
         ret                                 =       con_addr;
     }
     
-    //²éÑ¯ÓÃ»§µÄºÏÔ¼µØÖ·
+    //æŸ¥è¯¢ç”¨æˆ·çš„åˆçº¦åœ°å€
     function GetUserConAddr(string user_id) returns(address con_addr)
     {
         con_addr = user_id_con_map[user_id];
     }
     
      
-}
+} 
