@@ -153,10 +153,10 @@ contract User
              return uint(-3);
         }
         
-        quatation.insertList1(receipt_id, "参考合约", ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
+        quatation.insertList1(receipt_id, ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
                                 ReceiptMap[receipt_id].lev_id_,ReceiptMap[receipt_id].wh_id_,ReceiptMap[receipt_id].place_id_);
                                 
-        quo_id = quatation.insertList2(price, quo_qty, 0, quo_qty, 1000, "挂牌截止日",6039, user_id);
+        quo_id = quatation.insertList2(price, quo_qty, 0, quo_qty, "挂牌截止日",6039, user_id);
         
         //挂牌成功后，冻结仓单
         if(quo_id >0)
