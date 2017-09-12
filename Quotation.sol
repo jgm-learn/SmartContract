@@ -19,7 +19,6 @@ contract Quotation
         uint        quo_qty_;       //挂牌量
         uint        deal_qty_;      //成交量
         uint        rem_qty_;       //剩余量
-        uint        wr_premium_;    //仓单升贴水
         string      quo_deadline_;  //挂牌截止日
         uint        dlv_unit_;      //交割单位
         string      user_id_;       //用户id
@@ -31,15 +30,15 @@ contract Quotation
     mapping(uint => data_st)    data_map;   //挂牌编号 => 挂牌数据
     
     //输出行情 
-    event   print_1( uint,uint,string,string,string,string,string,string);
-    event   print_2(string, uint,uint,uint,uint,uint,string,uint, string );
+    event   print_1( uint,uint,uint,string,string,string,string,string);
+    event   print_2(string, uint,uint,uint,uint,string,uint, string );
     
     //打印错误信息
     event   error(string,string,string);
     
     //插入行情           
     function insertList1(uint receipt_id,
-                        string  ref_contract, string  class_id, string  make_date,   
+                        string  class_id, string  make_date,   
                         string  lev_id, string  wh_id, string  place_id)
     {
          quo_id_++;//挂牌编号
@@ -62,7 +61,6 @@ contract Quotation
         data_map[quo_id_].quo_qty_ = quo_qty;
         data_map[quo_id_].deal_qty_ = deal_qty;
         data_map[quo_id_].rem_qty_ = rem_qty;
-        data_map[quo_id_].wr_premium_ = wr_premium;
         data_map[quo_id_].quo_deadline_ = quo_deadline;
         data_map[quo_id_].dlv_unit_ = dlv_unit;
         data_map[quo_id_].user_id_ = user_id;
@@ -78,6 +76,7 @@ contract Quotation
     function printQuotation()
     {
         print_1(
+                data_map[quo_id_].quo_id_,
                 data_map[quo_id_].quo_date_,
                 data_map[quo_id_].receipt_id_, 
                 data_map[quo_id_].ref_contract_,
@@ -94,7 +93,6 @@ contract Quotation
                 data_map[quo_id_].quo_qty_ ,
                 data_map[quo_id_].deal_qty_,
                 data_map[quo_id_].rem_qty_ ,
-                data_map[quo_id_].wr_premium_,
                 data_map[quo_id_].quo_deadline_,
                 data_map[quo_id_].dlv_unit_,
                 data_map[quo_id_].user_id_
