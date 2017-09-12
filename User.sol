@@ -6,104 +6,104 @@ import "./UserList.sol";
 
 contract User
 {
-    //²Öµ¥Êı¾İ½á¹¹
+    //ä»“å•æ•°æ®ç»“æ„
     struct Receipt
     {
-        string      user_id_;       //¿Í»§id
-        uint        receipt_id_;    //²Öµ¥ĞòºÅ
-        string      class_id_;      //Æ·ÖÖid
-        string      make_date_;     //²úÆÚ
-        string      lev_id_;        //µÈ¼¶
-        string      wh_id_;         //²Ö¿â´úÂë
-        string      place_id_;      //²úµØ´úÂë
-        uint        receipt_amount_;  //²Öµ¥×ÜÁ¿
-        uint        frozen_amount_;   //¶³½áÊıÁ¿   
-        uint        available_amount_;//¿ÉÓÃÊıÁ¿
-        bool        state_;          //ÊÇ·ñ´æÔÚ
+        string      user_id_;       //å®¢æˆ·id
+        uint        receipt_id_;    //ä»“å•åºå·
+        string      class_id_;      //å“ç§id
+        string      make_date_;     //äº§æœŸ
+        string      lev_id_;        //ç­‰çº§
+        string      wh_id_;         //ä»“åº“ä»£ç 
+        string      place_id_;      //äº§åœ°ä»£ç 
+        uint        receipt_amount_;  //ä»“å•æ€»é‡
+        uint        frozen_amount_;   //å†»ç»“æ•°é‡   
+        uint        available_amount_;//å¯ç”¨æ•°é‡
+        bool        state_;          //æ˜¯å¦å­˜åœ¨
     }
      
-    //¹ÒÅÆÇëÇóÊı¾İ½á¹¹
+    //æŒ‚ç‰Œè¯·æ±‚æ•°æ®ç»“æ„
     struct list_req_st
     {
-         uint       receipt_id_;    //²Öµ¥ĞòºÅ
-         uint       quo_id_;        //¹Òµ¥±àºÅ
-         uint       price_;         //¼Û¸ñ£¨´úÌæ¸¡µãĞÍ£©
-         uint       quo_qty_;       //¹ÒÅÆÁ¿
-         uint       deal_qty_;      //³É½»Á¿
-         uint       rem_qty_;       //Ê£ÓàÁ¿
+         uint       receipt_id_;    //ä»“å•åºå·
+         uint       quo_id_;        //æŒ‚å•ç¼–å·
+         uint       price_;         //ä»·æ ¼ï¼ˆä»£æ›¿æµ®ç‚¹å‹ï¼‰
+         uint       quo_qty_;       //æŒ‚ç‰Œé‡
+         uint       deal_qty_;      //æˆäº¤é‡
+         uint       rem_qty_;       //å‰©ä½™é‡
     }
     
-    //ºÏÍ¬Êı¾İ½á¹¹
+    //åˆåŒæ•°æ®ç»“æ„
     struct contract_st
     {
-        uint        con_data_;          //ºÏÍ¬ÈÕÆÚ
-        uint        con_id_;            //ºÏÍ¬±àºÅ
-        uint        receipt_id_;        //²Öµ¥±àºÅ
-        string      buy_or_sell_;       //ÂòÂô
-        uint        price_;             //¼Û¸ñ
-        uint        con_qty_;           //ºÏÍ¬Á¿
-        //uint        fee_;               //ÊÖĞø·Ñ
-        //uint        transfer_money_;    //ÒÑ»®»õ¿î
-        //uint        remainder_money_;   //Ê£Óà»õ¿î
-        string      user_id_;           //¼º·½id
-        string      countparty_id_;     //¶ÔÊÖ·½id
-        //string      trade_state_;       //½»ÊÕ×´Ì¬
-        //string      trade_type_         //½»Ò×·½Ê½
+        uint        con_data_;          //åˆåŒæ—¥æœŸ
+        uint        con_id_;            //åˆåŒç¼–å·
+        uint        receipt_id_;        //ä»“å•ç¼–å·
+        string      buy_or_sell_;       //ä¹°å–
+        uint        price_;             //ä»·æ ¼
+        uint        con_qty_;           //åˆåŒé‡
+        //uint        fee_;               //æ‰‹ç»­è´¹
+        //uint        transfer_money_;    //å·²åˆ’è´§æ¬¾
+        //uint        remainder_money_;   //å‰©ä½™è´§æ¬¾
+        string      user_id_;           //å·±æ–¹id
+        string      countparty_id_;     //å¯¹æ‰‹æ–¹id
+        //string      trade_state_;       //äº¤æ”¶çŠ¶æ€
+        //string      trade_type_         //äº¤æ˜“æ–¹å¼
     }   
     
-    //Ğ­ÉÌ½»Ò×ÇëÇóÊı¾İ½á¹¹ ·¢ËÍ
+    //åå•†äº¤æ˜“è¯·æ±‚æ•°æ®ç»“æ„ å‘é€
     struct neg_req_send_st
     {
-        uint        receipt_id_;    //²Öµ¥ĞòºÅ
-        uint        quantity_;      //½»Ò×ÊıÁ¿
-        uint        price_;         //¼Û¸ñ
-        uint        negotiate_id_;  //Ğ­ÉÌ±àºÅ
-        string      counterparty_id_;//¶ÔÊÖ·½id
-        string      trade_state;    //³É½»×´Ì¬
+        uint        receipt_id_;    //ä»“å•åºå·
+        uint        quantity_;      //äº¤æ˜“æ•°é‡
+        uint        price_;         //ä»·æ ¼
+        uint        negotiate_id_;  //åå•†ç¼–å·
+        string      counterparty_id_;//å¯¹æ‰‹æ–¹id
+        string      trade_state;    //æˆäº¤çŠ¶æ€
     }
     
-    //Ğ­ÉÌ½»Ò×ÇëÇóÊı¾İ½á¹¹ ½ÓÊÕ
+    //åå•†äº¤æ˜“è¯·æ±‚æ•°æ®ç»“æ„ æ¥æ”¶
     struct neg_req_receive_st
     {
-        uint        receipt_id_;        //²Öµ¥ĞòºÅ
-        uint        quantity_;          //½»Ò×ÊıÁ¿
-        uint        price_;             //¼Û¸ñ
-        uint        negotiate_id_;      //Ğ­ÉÌ±àºÅ
-        string      counterparty_id_;   //¶ÔÊÖ·½id
-        address     sell_con_addr_;     //Âô·½µÄºÏÔ¼µØÖ·
-        string      trade_state;        //³É½»×´Ì¬
+        uint        receipt_id_;        //ä»“å•åºå·
+        uint        quantity_;          //äº¤æ˜“æ•°é‡
+        uint        price_;             //ä»·æ ¼
+        uint        negotiate_id_;      //åå•†ç¼–å·
+        string      counterparty_id_;   //å¯¹æ‰‹æ–¹id
+        address     sell_con_addr_;     //å–æ–¹çš„åˆçº¦åœ°å€
+        string      trade_state;        //æˆäº¤çŠ¶æ€
     }
     
     
     
-     Quotation                          quatation;          //ĞĞÇéºÏÔ¼±äÁ¿
-     ID_contract                        ID;                 //IDºÏÔ¼±äÁ¿
-     UserList                           user_list;          //ÓÃ»§ÁĞ±íºÏÔ¼±äÁ¿
+     Quotation                          quatation;          //è¡Œæƒ…åˆçº¦å˜é‡
+     ID_contract                        ID;                 //IDåˆçº¦å˜é‡
+     UserList                           user_list;          //ç”¨æˆ·åˆ—è¡¨åˆçº¦å˜é‡
      
-     //´æ´¢²Öµ¥     
-     mapping(uint => Receipt)           ReceiptMap;         //²Öµ¥ID => ²Öµ¥
+     //å­˜å‚¨ä»“å•     
+     mapping(uint => Receipt)           ReceiptMap;         //ä»“å•ID => ä»“å•
         
-     //´æ´¢¹ÒÅÆÇëÇó     
+     //å­˜å‚¨æŒ‚ç‰Œè¯·æ±‚     
      list_req_st[]                      list_req_array;     
      
-     //´æ´¢ºÏÍ¬
-     mapping(uint => contract_st)       contract_map;       //ºÏÍ¬±àºÅ => ºÏÍ¬
+     //å­˜å‚¨åˆåŒ
+     mapping(uint => contract_st)       contract_map;       //åˆåŒç¼–å· => åˆåŒ
      
-     //Ğ­ÉÌ½»Ò×ÇëÇóÁĞ±í
+     //åå•†äº¤æ˜“è¯·æ±‚åˆ—è¡¨
      neg_req_send_st[]                  neg_req_send_array; 
      neg_req_receive_st[]               neg_req_receive_array; 
      
      
    
      
-     //´òÓ¡´íÎóĞÅÏ¢
+     //æ‰“å°é”™è¯¯ä¿¡æ¯
      event error(string,string, uint);
      
      event inform(string);
      
      
      
-     //¹¹Ôìº¯Êı
+     //æ„é€ å‡½æ•°
      function User(address id_addr, address quo_addr, address user_list_addr)
      {
          ID         =   ID_contract(id_addr);
@@ -111,7 +111,7 @@ contract User
          user_list  =   UserList(user_list_addr);
      }
      
-    //¹¹Ôì²Öµ¥ "A",0,"sugar","2017","lev","wh_id","place",30
+    //æ„é€ ä»“å• "A",0,"sugar","2017","lev","wh_id","place",30
    function CreateRecipt(string user_id, uint receipt_id, string class_id,string make_date,
                         string lev_id, string wh_id, string place_id,  uint receipt_amount)
     {
@@ -120,19 +120,19 @@ contract User
                                         wh_id, place_id, receipt_amount,0,receipt_amount,true);
     }
     
-    //»ñÈ¡³ÖÓĞÕßµÄ²Öµ¥ÊıÁ¿
+    //è·å–æŒæœ‰è€…çš„ä»“å•æ•°é‡
     function getReceiptAmount(uint receipt_id) returns (uint)
     {
         return ReceiptMap[receipt_id].receipt_amount_;
     }
     
-     //»ñÈ¡¿ÉÓÃ²Öµ¥ÊıÁ¿
+     //è·å–å¯ç”¨ä»“å•æ•°é‡
     function getAvailableAmount(uint receipt_id) returns (uint)
     {
         return ReceiptMap[receipt_id].available_amount_;
     }
     
-    //¼õÉÙ³ÖÓĞÕßµÄ²Öµ¥ÊıÁ¿
+    //å‡å°‘æŒæœ‰è€…çš„ä»“å•æ•°é‡
     function reduceuint (uint receipt_id, uint reduece_amount) returns (bool)
     {
         if( reduece_amount > ReceiptMap[receipt_id].receipt_amount_ )
@@ -142,14 +142,14 @@ contract User
          return true;
     } 
     
-     //Ôö¼Ó³ÖÓĞÕßµÄ²Öµ¥ÊıÁ¿
+     //å¢åŠ æŒæœ‰è€…çš„ä»“å•æ•°é‡
     function increase(uint receipt_id, uint increase_amount)
     {
          ReceiptMap[receipt_id].receipt_amount_ += increase_amount;
          ReceiptMap[receipt_id].receipt_amount_ += increase_amount;
     }
     
-    //¶³½á²Öµ¥
+    //å†»ç»“ä»“å•
     function freeze(uint receipt_id, uint amount) returns (bool)
     {
         if( amount > ReceiptMap[receipt_id].receipt_amount_ )
@@ -163,37 +163,37 @@ contract User
     
     
     
-    //¹ÒÅÆÇëÇó "zhang",0,10,20
+    //æŒ‚ç‰Œè¯·æ±‚ "zhang",0,10,20
     function ListRequire(string user_id, uint receipt_id, uint price, uint quo_qty) returns(uint quo_id )
     {
         if(ReceiptMap[receipt_id].state_ == false)
         {
-             error("ListRequire():²Öµ¥ĞòºÅ²»´æÔÚ","´íÎó´úÂë£º",uint(-2));
+             error("ListRequire():ä»“å•åºå·ä¸å­˜åœ¨","é”™è¯¯ä»£ç ï¼š",uint(-2));
              return uint(-2);
         }
         if(quo_qty > ReceiptMap[receipt_id].available_amount_)  
          {
-             error("ListRequire():¿ÉÓÃ²Öµ¥ÊıÁ¿²»×ã","´íÎó´úÂë£º",uint(-3));
+             error("ListRequire():å¯ç”¨ä»“å•æ•°é‡ä¸è¶³","é”™è¯¯ä»£ç ï¼š",uint(-3));
              return uint(-3);
         }
         
-        freeze(receipt_id, quo_qty);//¶³½á²Öµ¥
+        freeze(receipt_id, quo_qty);//å†»ç»“ä»“å•
         
-        quatation.insert_list_1(receipt_id, "²Î¿¼ºÏÔ¼", ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
+        quatation.insert_list_1(receipt_id, "å‚è€ƒåˆçº¦", ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
                                 ReceiptMap[receipt_id].lev_id_,ReceiptMap[receipt_id].wh_id_,ReceiptMap[receipt_id].place_id_);
                                 
-        quo_id = quatation.insert_list_2(price, quo_qty, 0, quo_qty, 1000, "¹ÒÅÆ½ØÖ¹ÈÕ",6039, user_id);
+        quo_id = quatation.insert_list_2(price, quo_qty, 0, quo_qty, 1000, "æŒ‚ç‰Œæˆªæ­¢æ—¥",6039, user_id);
         
         if(quo_id >0)
         {
-            freeze(receipt_id, quo_qty);        //¶³½á²Öµ¥
+            freeze(receipt_id, quo_qty);        //å†»ç»“ä»“å•
         }
         
-        //Ìí¼Ó¹ÒÅÆÇëÇó
+        //æ·»åŠ æŒ‚ç‰Œè¯·æ±‚
         list_req_array.push( list_req_st(receipt_id, quo_id, price, quo_qty, 0, quo_qty) ); 
     }
     
-    //¸üĞÂÂô·½¹ÒÅÆÇëÇó
+    //æ›´æ–°å–æ–¹æŒ‚ç‰Œè¯·æ±‚
     function update_list_req(uint quo_id, uint deal_qty)
     {
         for(uint i = 0; i<list_req_array.length; i++)
@@ -208,16 +208,16 @@ contract User
         
     }
     
-    //ÕªÅÆÇëÇó "li",1,10
+    //æ‘˜ç‰Œè¯·æ±‚ "li",1,10
     function delist_require(string user_id, uint quo_id, uint deal_qty) 
     {
         quatation.delist(user_id, quo_id, deal_qty);
     }
     
-    //³É½» ´´½¨ºÏÍ¬
+    //æˆäº¤ åˆ›å»ºåˆåŒ
     function deal_contract(uint  receipt_id, string  buy_or_sell, uint price, uint con_qty, string countparty_id)
     {
-        uint con_id = ID.contract_id();//»ñÈ¡ºÏÍ¬±àºÅ
+        uint con_id = ID.contract_id();//è·å–åˆåŒç¼–å·
         
         contract_map[con_id].con_data_ = now;
         contract_map[con_id].con_id_ = con_id;
@@ -227,33 +227,33 @@ contract User
         contract_map[con_id].con_qty_ = con_qty;
         contract_map[con_id].countparty_id_ = countparty_id;
         
-        inform("³É¹¦´´½¨ºÏÍ¬£¬½»Ò×´ï³É");
+        inform("æˆåŠŸåˆ›å»ºåˆåŒï¼Œäº¤æ˜“è¾¾æˆ");
     }
     
 
     
     
-    //·¢ËÍĞ­ÉÌ½»Ò×ÇëÇó Âô·½µ÷ÓÃ
+    //å‘é€åå•†äº¤æ˜“è¯·æ±‚ å–æ–¹è°ƒç”¨
     function send_negotiate_req(uint receipt_id, uint price, 
                                 uint quantity, string counterparty_id) returns(uint)
     {
         if(quantity > ReceiptMap[receipt_id].available_amount_)
         {
-            error("negotiate_req():¿ÉÓÃ²Öµ¥ÊıÁ¿²»×ã","´íÎó´úÂë:",uint(-1));
+            error("negotiate_req():å¯ç”¨ä»“å•æ•°é‡ä¸è¶³","é”™è¯¯ä»£ç :",uint(-1));
             return uint(-1);
         }
         
-        //¶³½á²Öµ¥
+        //å†»ç»“ä»“å•
         freeze(receipt_id, quantity);
         
         
-        uint    neg_id = ID.negotiate_id();//Ğ­ÉÌ½»Ò×±àºÅ
+        uint    neg_id = ID.negotiate_id();//åå•†äº¤æ˜“ç¼–å·
         
-        //¸üĞÂĞ­ÉÌ½»Ò×ÇëÇóÁĞ±í£¨·¢ËÍ£©
+        //æ›´æ–°åå•†äº¤æ˜“è¯·æ±‚åˆ—è¡¨ï¼ˆå‘é€ï¼‰
         neg_req_send_array.push( neg_req_send_st(receipt_id,quantity,price,
-                                neg_id,counterparty_id,"Î´³É½»") );
+                                neg_id,counterparty_id,"æœªæˆäº¤") );
        
-        //µ÷ÓÃ¶ÔÊÖ·½Ğ­ÉÌ½»Ò×ÇëÇóµÄ½ÓÊÕ·½·¨
+        //è°ƒç”¨å¯¹æ‰‹æ–¹åå•†äº¤æ˜“è¯·æ±‚çš„æ¥æ”¶æ–¹æ³•
         User counterparty =  User( user_list.GetUserConAddr(counterparty_id) );
         counterparty.recieve_negotiate_req(receipt_id,quantity,price,
                                 neg_id, ReceiptMap[receipt_id].user_id_);
@@ -262,20 +262,20 @@ contract User
     }
     
     
-    //½ÓÊÕĞ­ÉÌ½»Ò×ÇëÇó Âô·½µ÷ÓÃ
+    //æ¥æ”¶åå•†äº¤æ˜“è¯·æ±‚ å–æ–¹è°ƒç”¨
     function recieve_negotiate_req(uint receipt_id, uint price, uint quantity, 
                                     uint neg_id,string counterparty_id)
     {
         neg_req_receive_array.push( neg_req_receive_st(receipt_id,quantity,price,
-                                neg_id,counterparty_id,msg.sender,"Î´³É½»") );
+                                neg_id,counterparty_id,msg.sender,"æœªæˆäº¤") );
     }
     
-     //È·ÈÏĞ­ÉÌ½»Ò× Âò·½µ÷ÓÃ´Ëº¯Êı
+     //ç¡®è®¤åå•†äº¤æ˜“ ä¹°æ–¹è°ƒç”¨æ­¤å‡½æ•°
     function agree_negotiate(string user_id, uint  receipt_id,  uint price,
                                 uint con_qty, string countparty_id)
     {
-        //´´½¨Âò·½ºÏÍ¬
-        deal_contract(receipt_id, "Âò", price,con_qty,countparty_id);
+        //åˆ›å»ºä¹°æ–¹åˆåŒ
+        deal_contract(receipt_id, "ä¹°", price,con_qty,countparty_id);
         
         //
         for(uint i= 0; i<neg_req_receive_array.length; i++ )
@@ -283,12 +283,12 @@ contract User
             if(neg_req_receive_array[i].receipt_id_ == receipt_id)
                 break;
         }
-        //´´½¨Âô·½ºÏÍ¬
+        //åˆ›å»ºå–æ–¹åˆåŒ
         User user_sell = User(neg_req_receive_array[i].sell_con_addr_);
-        user_sell.deal_contract(receipt_id, "Âô", price,con_qty,user_id);
+        user_sell.deal_contract(receipt_id, "å–", price,con_qty,user_id);
     }
     
-}
+} 
 
 
 
