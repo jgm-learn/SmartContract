@@ -68,14 +68,13 @@ contract User
         uint        receipt_id_;        //仓单序号
         uint        quantity_;          //交易数量
         uint        price_;             //价格
-        uint        negotiate_id_;      //协商编号
-        string      counterparty_id_;   //对手方id
+        uint        neg_id_;            //协商编号
+        string      user_sell_id_;      //对手方id
         address     sell_con_addr_;     //卖方的合约地址
         string      trade_state;        //成交状态
     }
     
-    
-    
+     
      Quotation                          quatation;          //行情合约变量
      ID_contract                        ID;                 //ID合约变量
      UserList                           user_list;          //用户列表合约变量
@@ -93,9 +92,7 @@ contract User
      neg_req_send_st[]                  neg_req_send_array; 
      neg_req_receive_st[]               neg_req_receive_array; 
      
-     
-   
-     
+      
      //打印错误信息
      event error(string,string, uint);
      
@@ -131,29 +128,10 @@ contract User
     {
         return ReceiptMap[receipt_id].available_amount_;
     }
-    
-    //减少持有者的仓单数量
-    function reduceuint (uint receipt_id, uint reduece_amount) returns (bool)
-    {
-        if( reduece_amount > ReceiptMap[receipt_id].receipt_amount_ )
-            return false;
        
-         ReceiptMap[receipt_id].receipt_amount_ -= reduece_amount;
-         return true;
-    } 
-    
-     //增加持有者的仓单数量
-    function increase(uint receipt_id, uint increase_amount)
-    {
-         ReceiptMap[receipt_id].receipt_amount_ += increase_amount;
-         ReceiptMap[receipt_id].receipt_amount_ += increase_amount;
-    }
-    
     //冻结仓单
     function freeze(uint receipt_id, uint amount) returns (bool)
     {
-        if( amount > ReceiptMap[receipt_id].receipt_amount_ )
-            return false;
          ReceiptMap[receipt_id].frozen_amount_    += amount;
          ReceiptMap[receipt_id].available_amount_ -= amount;
          
@@ -161,10 +139,8 @@ contract User
     }
 
     
-    
-    
     //挂牌请求 "zhang",0,10,20
-    function ListRequire(string user_id, uint receipt_id, uint price, uint quo_qty) returns(uint quo_id )
+    function listRequire(string user_id, uint receipt_id, uint price, uint quo_qty) returns(uint quo_id )
     {
         if(ReceiptMap[receipt_id].state_ == false)
         {
@@ -177,30 +153,27 @@ contract User
              return uint(-3);
         }
         
-        freeze(receipt_id, quo_qty);//冻结仓单
-        
-        quatation.insert_list_1(receipt_id, "参考合约", ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
+        quatation.insertList1(receipt_id, "参考合约", ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
                                 ReceiptMap[receipt_id].lev_id_,ReceiptMap[receipt_id].wh_id_,ReceiptMap[receipt_id].place_id_);
                                 
-        quo_id = quatation.insert_list_2(price, quo_qty, 0, quo_qty, 1000, "挂牌截止日",6039, user_id);
+        quo_id = quatation.insertList2(price, quo_qty, 0, quo_qty, 1000, "挂牌截止日",6039, user_id);
         
+        //挂牌成功后，冻结仓单
         if(quo_id >0)
-        {
             freeze(receipt_id, quo_qty);        //冻结仓单
-        }
         
         //添加挂牌请求
         list_req_array.push( list_req_st(receipt_id, quo_id, price, quo_qty, 0, quo_qty) ); 
     }
     
     //更新卖方挂牌请求
-    function update_list_req(uint quo_id, uint deal_qty)
+    function updateListReq(uint quo_id, uint deal_qty)
     {
         for(uint i = 0; i<list_req_array.length; i++)
         {
             if(list_req_array[i].quo_id_ == quo_id)
             {
-                list_req_array[i].deal_qty_      =      deal_qty;
+                list_req_array[i].deal_qty_      +=      deal_qty;
                 list_req_array[i].rem_qty_       -=     deal_qty;
                 break;
             }
@@ -209,13 +182,13 @@ contract User
     }
     
     //摘牌请求 "li",1,10
-    function delist_require(string user_id, uint quo_id, uint deal_qty) 
+    function delListReq(string user_id, uint quo_id, uint deal_qty) 
     {
-        quatation.delist(user_id, quo_id, deal_qty);
+        quatation.delList(user_id, quo_id, deal_qty);
     }
     
     //成交 创建合同
-    function deal_contract(uint  receipt_id, string  buy_or_sell, uint price, uint con_qty, string countparty_id)
+    function dealContract(uint  receipt_id, string  buy_or_sell, uint price, uint con_qty, string countparty_id)
     {
         uint con_id = ID.contract_id();//获取合同编号
         
@@ -234,7 +207,7 @@ contract User
     
     
     //发送协商交易请求 卖方调用
-    function send_negotiate_req(uint receipt_id, uint price, 
+    function sendNegReq(uint receipt_id, uint price, 
                                 uint quantity, string counterparty_id) returns(uint)
     {
         if(quantity > ReceiptMap[receipt_id].available_amount_)
@@ -246,7 +219,6 @@ contract User
         //冻结仓单
         freeze(receipt_id, quantity);
         
-        
         uint    neg_id = ID.negotiate_id();//协商交易编号
         
         //更新协商交易请求列表（发送）
@@ -255,37 +227,38 @@ contract User
        
         //调用对手方协商交易请求的接收方法
         User counterparty =  User( user_list.GetUserConAddr(counterparty_id) );
-        counterparty.recieve_negotiate_req(receipt_id,quantity,price,
+        counterparty.recieveNegReq(receipt_id,quantity,price,
                                 neg_id, ReceiptMap[receipt_id].user_id_);
         
         
     }
     
     
-    //接收协商交易请求 卖方调用
-    function recieve_negotiate_req(uint receipt_id, uint price, uint quantity, 
-                                    uint neg_id,string counterparty_id)
+    //接收协商交易请求 卖方调用买方
+    function recieveNegReq(uint receipt_id, uint price, uint quantity, 
+                                    uint neg_id,string user_sell_id)
     {
         neg_req_receive_array.push( neg_req_receive_st(receipt_id,quantity,price,
-                                neg_id,counterparty_id,msg.sender,"未成交") );
+                                neg_id,user_sell_id, msg.sender,"未成交") );
     }
     
      //确认协商交易 买方调用此函数
-    function agree_negotiate(string user_id, uint  receipt_id,  uint price,
-                                uint con_qty, string countparty_id)
+    function agreeNeg(string user_buy_id, uint neg_id)
     {
-        //创建买方合同
-        deal_contract(receipt_id, "买", price,con_qty,countparty_id);
-        
-        //
         for(uint i= 0; i<neg_req_receive_array.length; i++ )
         {
-            if(neg_req_receive_array[i].receipt_id_ == receipt_id)
+            if(neg_req_receive_array[i].neg_id_ == neg_id)
                 break;
         }
+        
+        //创建买方合同
+        dealContract(neg_req_receive_array[i].receipt_id_, "买", neg_req_receive_array[i].price_,
+                         neg_req_receive_array[i].quantity_,neg_req_receive_array[i].user_sell_id_);
+        
         //创建卖方合同
         User user_sell = User(neg_req_receive_array[i].sell_con_addr_);
-        user_sell.deal_contract(receipt_id, "卖", price,con_qty,user_id);
+        user_sell.dealContract(neg_req_receive_array[i].receipt_id_, "卖", neg_req_receive_array[i].price_,
+                                neg_req_receive_array[i].quantity_,user_buy_id);
     }
     
 } 
