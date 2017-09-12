@@ -7,6 +7,7 @@ contract Quotation
     struct data_st
     {
         uint        quo_date_;      //挂牌日期
+        uint        quo_id_;        //挂牌编号
         uint        receipt_id_;    //仓单编号
         string      ref_contract_;  //参考合约
         string      class_id_;      //品种代码
@@ -27,8 +28,8 @@ contract Quotation
         bool        state;          //是否存在
     }
     
-    uint                        quo_id_ = 0; //挂单编号从 1 开始
-    mapping(uint => data_st)    data_map;   //挂单编号 => 挂单数据
+    uint                        quo_id_ = 0; //挂牌编号从 1 开始
+    mapping(uint => data_st)    data_map;   //挂牌编号 => 挂牌数据
     
     //输出行情 
     event   print_1( uint,uint,string,string,string,string,string,string);
@@ -38,13 +39,14 @@ contract Quotation
     event   error(string,string,string);
     
     //插入行情           
-    function insert_list_1(uint receipt_id,
+    function insertList1(uint receipt_id,
                         string  ref_contract, string  class_id, string  make_date,   
                         string  lev_id, string  wh_id, string  place_id)
     {
-         quo_id_++;//挂单编号
+         quo_id_++;//挂牌编号
          
         data_map[quo_id_].quo_date_ = now;
+        data_map[quo_id_].quo_id_ = quo_id_;
         data_map[quo_id_].receipt_id_ = receipt_id;
         data_map[quo_id_].ref_contract_ = ref_contract;
         data_map[quo_id_].class_id_ = class_id;
@@ -54,7 +56,7 @@ contract Quotation
         data_map[quo_id_].place_id_ = place_id;
         data_map[quo_id_].quo_type_ = "一口价";
     }
-    function insert_list_2(uint price, uint quo_qty, uint deal_qty,
+    function insertList2(uint price, uint quo_qty, uint deal_qty,
                             uint rem_qty, uint wr_premium,  string  quo_deadline, 
                             uint dlv_unit, string user_id ) returns(uint)
     {
@@ -68,20 +70,14 @@ contract Quotation
         data_map[quo_id_].user_id_ = user_id;
         data_map[quo_id_].seller_addr_ = msg.sender;
         data_map[quo_id_].state = true;  
-            
-            
-        print_quotation();    
+                  
+        printQuotation();      
         
-        //冻结仓单   
-       // User user = User(msg.sender);
-       // user.freeze( data_map[index_list].firm_sheet_id_,quo_qty);
-            
-        return quo_id_;
-            
+        return quo_id_;        
     }
     
     //打印行情
-    function print_quotation()
+    function printQuotation()
     {
         print_1(
                 data_map[quo_id_].quo_date_,
@@ -109,7 +105,7 @@ contract Quotation
   
   
     //摘牌
-    function delist(string user_id, uint quo_id, uint deal_qty) returns(uint)
+    function delList(string user_id, uint quo_id, uint deal_qty) returns(uint)
     {
         if(deal_qty > data_map[quo_id].rem_qty_ )
         {
@@ -123,33 +119,24 @@ contract Quotation
         
         //更新卖方挂牌请求
         User user_sell = User(data_map[quo_id].seller_addr_);
-        user_sell.update_list_req(quo_id, deal_qty);
+        user_sell.updateListReq(quo_id, deal_qty);
         
         //创建卖方合同
-        user_sell.deal_contract(data_map[quo_id].receipt_id_, "卖",  data_map[quo_id].price_, deal_qty, user_id);
+        user_sell.dealContract(data_map[quo_id].receipt_id_, "卖",  data_map[quo_id].price_, deal_qty, user_id);
         //创建买方合同
         User user_buy = User(msg.sender);
-        user_buy.deal_contract(data_map[quo_id].receipt_id_, "买",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
+        user_buy.dealContract(data_map[quo_id].receipt_id_, "买",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
         
+        //仓单全部成交，删除该条行情
+        if(data_map[quo_id].rem_qty_ == 0 )
+            delete data_map[quo_id];
+            
         //打印行情
-        print_quotation();
+        printQuotation();
+        
+        return 0;
         
         
     }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
     
 }
