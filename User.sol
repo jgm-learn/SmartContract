@@ -243,7 +243,7 @@ contract User
         }
         
         //冻结仓单
-        if( ! freeze(receipt_id, quo_qty))
+        if( ! freeze(receipt_id, quantity))
             {
                     error1("冻结仓单失败");
                     return;
