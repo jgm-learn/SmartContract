@@ -95,7 +95,7 @@ contract User
       
      //打印错误信息
      event error(string,string, uint);
-     
+     event error1(string);
      event inform(string);
      
      
@@ -132,6 +132,9 @@ contract User
     //冻结仓单
     function freeze(uint receipt_id, uint amount) returns (bool)
     {
+         if(amount > ReceiptMap[receipt_id].available_amount_)  
+              return false;
+              
          ReceiptMap[receipt_id].frozen_amount_    += amount;
          ReceiptMap[receipt_id].available_amount_ -= amount;
          
@@ -160,8 +163,13 @@ contract User
         
         //挂牌成功后，冻结仓单
         if(quo_id >0)
-            freeze(receipt_id, quo_qty);        //冻结仓单
-        
+        {
+           if( ! freeze(receipt_id, quo_qty))
+            {
+                    error1("冻结仓单失败");
+                    return;
+            }
+        }
         //添加挂牌请求
         list_req_array.push( list_req_st(receipt_id, quo_id, price, quo_qty, 0, quo_qty) ); 
     }
@@ -235,7 +243,11 @@ contract User
         }
         
         //冻结仓单
-        freeze(receipt_id, quantity);
+        if( ! freeze(receipt_id, quo_qty))
+            {
+                    error1("冻结仓单失败");
+                    return;
+            }
         
         uint    neg_id = ID.getNegID();//协商交易编号
         
