@@ -118,10 +118,10 @@ contract Quotation
         user_sell.updateListReq(quo_id, deal_qty);
         
         //创建卖方合同
-        user_sell.dealContract(data_map[quo_id].receipt_id_, "卖",  data_map[quo_id].price_, deal_qty, user_id);
+        uint con_id_tmp = user_sell.dealSellContract(data_map[quo_id].receipt_id_, "卖",  data_map[quo_id].price_, deal_qty, user_id);
         //创建买方合同
         User user_buy = User(msg.sender);
-        user_buy.dealContract(data_map[quo_id].receipt_id_, "买",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
+        user_buy.dealBuyContract(con_id_tmp,data_map[quo_id].receipt_id_, "买",  data_map[quo_id].price_, deal_qty, data_map[quo_id].user_id_);
         
         //仓单全部成交，删除该条行情
         if(data_map[quo_id].rem_qty_ == 0 )
