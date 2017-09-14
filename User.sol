@@ -76,7 +76,7 @@ contract User
     
      
      Quotation                          quatation;          //行情合约变量
-     ID_contract                        ID;                 //ID合约变量
+     CreateID                        ID;                 //ID合约变量
      UserList                           user_list;          //用户列表合约变量
      
      //存储仓单     
@@ -190,7 +190,7 @@ contract User
     //成交 创建合同
     function dealContract(uint  receipt_id, string  buy_or_sell, uint price, uint con_qty, string countparty_id)
     {
-        uint con_id = ID.contract_id();//获取合同编号
+        uint con_id = ID.getConID();//获取合同编号
         
         contract_map[con_id].con_data_ = now;
         contract_map[con_id].con_id_ = con_id;
@@ -219,7 +219,7 @@ contract User
         //冻结仓单
         freeze(receipt_id, quantity);
         
-        uint    neg_id = ID.negotiate_id();//协商交易编号
+        uint    neg_id = ID.getNegID();//协商交易编号
         
         //更新协商交易请求列表（发送）
         neg_req_send_array.push( neg_req_send_st(receipt_id,quantity,price,
