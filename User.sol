@@ -187,11 +187,29 @@ contract User
         quatation.delList(user_id, quo_id, deal_qty);
     }
     
-    //成交 创建合同
-    function dealContract(uint  receipt_id, string  buy_or_sell, uint price, uint con_qty, string countparty_id)
+    //成交 创建“卖”合同
+    function dealContract(uint  receipt_id, string  buy_or_sell, 
+                          uint price, uint con_qty, string countparty_id) returns(uint)
     {
         uint con_id = ID.getConID();//获取合同编号
         
+        contract_map[con_id].con_data_ = now;
+        contract_map[con_id].con_id_ = con_id;
+        contract_map[con_id].receipt_id_ = receipt_id;
+        contract_map[con_id].buy_or_sell_ = buy_or_sell;
+        contract_map[con_id].price_ = price;
+        contract_map[con_id].con_qty_ = con_qty;
+        contract_map[con_id].countparty_id_ = countparty_id;
+        
+        inform("成功创建合同，交易达成");
+        
+        return con_id;
+    }
+    
+     //创建“买”合同
+    function dealBuyContract(uint con_id,uint receipt_id, string  buy_or_sell, uint price, 
+                            uint con_qty, string countparty_id) 
+    {
         contract_map[con_id].con_data_ = now;
         contract_map[con_id].con_id_ = con_id;
         contract_map[con_id].receipt_id_ = receipt_id;
@@ -251,34 +269,14 @@ contract User
                 break;
         }
         
-        //创建买方合同
-        dealContract(neg_req_receive_array[i].receipt_id_, "买", neg_req_receive_array[i].price_,
-                         neg_req_receive_array[i].quantity_,neg_req_receive_array[i].user_sell_id_);
-        
         //创建卖方合同
         User user_sell = User(neg_req_receive_array[i].sell_con_addr_);
-        user_sell.dealContract(neg_req_receive_array[i].receipt_id_, "卖", neg_req_receive_array[i].price_,
+        uint con_id_tmp = user_sell.dealSellContract(neg_req_receive_array[i].receipt_id_, "卖", neg_req_receive_array[i].price_,
                                 neg_req_receive_array[i].quantity_,user_buy_id);
+        //创建买方合同
+        dealBuyContract(con_id_tmp,neg_req_receive_array[i].receipt_id_, "买", neg_req_receive_array[i].price_,
+                         neg_req_receive_array[i].quantity_,neg_req_receive_array[i].user_sell_id_);
+        
     }
     
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
