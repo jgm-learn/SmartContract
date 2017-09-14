@@ -75,7 +75,7 @@ contract User
     }
     
      
-     Quotation                          quatation;          //行情合约变量
+     Quotation                          quotation;          //行情合约变量
      CreateID                        ID;                 //ID合约变量
      UserList                           user_list;          //用户列表合约变量
      
@@ -104,7 +104,7 @@ contract User
      function User(address id_addr, address quo_addr, address user_list_addr)
      {
          ID         =   ID_contract(id_addr);
-         quatation  =   Quotation(quo_addr);
+         quotation  =   Quotation(quo_addr);
          user_list  =   UserList(user_list_addr);
      }
      
@@ -156,10 +156,10 @@ contract User
              return uint(-3);
         }
         
-        quatation.insertList1(receipt_id, ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
+        quotation.insertList1(receipt_id, ReceiptMap[receipt_id].class_id_, ReceiptMap[receipt_id].make_date_,
                                 ReceiptMap[receipt_id].lev_id_,ReceiptMap[receipt_id].wh_id_,ReceiptMap[receipt_id].place_id_);
                                 
-        quo_id = quatation.insertList2(price, quo_qty, 0, quo_qty, "挂牌截止日",6039, user_id);
+        quo_id = quotation.insertList2(price, quo_qty, 0, quo_qty, "挂牌截止日",6039, user_id);
         
         //挂牌成功后，冻结仓单
         if(quo_id >0)
@@ -192,7 +192,7 @@ contract User
     //摘牌请求 "li",1,10
     function delListReq(string user_id, uint quo_id, uint deal_qty) 
     {
-        quatation.delList(user_id, quo_id, deal_qty);
+        quotation.delList(user_id, quo_id, deal_qty);
     }
     
     //成交 创建“卖”合同
